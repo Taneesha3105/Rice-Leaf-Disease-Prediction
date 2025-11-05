@@ -96,12 +96,13 @@ CLASS_MAPPINGS = {
 }
 
 # Load fertilizer data
-@st.cache_data
-def load_fertilizer_data(xlsx_path="fertilizer_dataset_Brief.xlsx"):
-    if not os.path.exists(xlsx_path):
-        st.warning(f"⚠️ Fertilizer data file not found: {xlsx_path}")
+    @st.cache_data
+def load_fertilizer_data(csv_path="fertilizer_dataset_Brief.csv"):
+    if not os.path.exists(csv_path):
+        st.warning(f"⚠️ Fertilizer data file not found: {csv_path}")
         return {}
-    df = pd.read_xlsx(xlsx_path)
+    df = pd.read_csv(csv_path)
+
     fertilizer_data = {}
     for _, row in df.iterrows():
         disease_name = row['Disease']
@@ -114,6 +115,7 @@ def load_fertilizer_data(xlsx_path="fertilizer_dataset_Brief.xlsx"):
     return fertilizer_data
 
 fertilizer_recommendations = load_fertilizer_data()
+
 
 # Load trained ResNet50 model
 @st.cache_resource
