@@ -97,11 +97,11 @@ CLASS_MAPPINGS = {
 
 # Load fertilizer data
 @st.cache_data
-def load_fertilizer_data(csv_path="fertilizer_dataset_Brief.csv"):
-    if not os.path.exists(csv_path):
-        st.warning(f"⚠️ Fertilizer data file not found: {csv_path}")
+def load_fertilizer_data(xlsx_path="fertilizer_dataset_Brief.xlsx"):
+    if not os.path.exists(xlsx_path):
+        st.warning(f"⚠️ Fertilizer data file not found: {xlsx_path}")
         return {}
-    df = pd.read_csv(csv_path)
+    df = pd.read_xlsx(xlsx_path)
     fertilizer_data = {}
     for _, row in df.iterrows():
         disease_name = row['Disease']
