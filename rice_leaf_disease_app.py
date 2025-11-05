@@ -16,6 +16,16 @@ st.set_page_config(
     page_icon="🌱"
 )
 
+# --- Hide Streamlit default menu, footer, and toolbar ---
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 # ===============================
 # 💅 CUSTOM CSS
 # ===============================
@@ -95,14 +105,18 @@ CLASS_MAPPINGS = {
     3: "tungro"
 }
 
-# Load fertilizer data
+# Load fertilizer data (Excel)
 @st.cache_data
 def load_fertilizer_data(excel_path="fertilizer_dataset_Brief.xlsx"):
     if not os.path.exists(excel_path):
         st.warning(f"⚠️ Fertilizer data file not found: {excel_path}")
         return {}
-    # Read Excel file instead of CSV
     df = pd.read_excel(excel_path, engine="openpyxl")
+
+    # Restrict to only 4 diseases
+    allowed_diseases = ["Healthy", "Leaf Scald", "Brown Spot", "Tungro"]
+    df = df[df["Disease"].isin(allowed_diseases)]
+
     fertilizer_data = {}
     for _, row in df.iterrows():
         disease_name = row['Disease']
@@ -115,13 +129,6 @@ def load_fertilizer_data(excel_path="fertilizer_dataset_Brief.xlsx"):
     return fertilizer_data
 
 fertilizer_recommendations = load_fertilizer_data()
-
-
-
-
-
-
-
 
 # Load trained ResNet50 model
 @st.cache_resource
@@ -166,7 +173,7 @@ def predict_image(image):
 st.markdown('<div class="big-font">🌾Rice Leaf Disease Detector🌾</div>', unsafe_allow_html=True)
 st.markdown('<div class="medium-font">AI-powered system for detecting rice leaf diseases and suggesting fertilizers</div>', unsafe_allow_html=True)
 
-# Tabs for organization
+# Tabs
 tab1, tab2 = st.tabs(["🔍Disease Detection", "🌱Fertilizer Recommendations"])
 
 # -------------------
@@ -220,7 +227,7 @@ with tab2:
         fert_info = fertilizer_recommendations[selected_disease]
         st.markdown(f"""
         <div class="info-box">
-            <h3>Fertilizer Recommendations for {selected_disease.replace('_', ' ').title()}</h3>
+            <h3>Fertilizer Recommendations for {selected_disease}</h3>
             <ul>
                 <li><b>Nitrogen:</b> {fert_info['Nitrogen Fertilizer']}</li>
                 <li><b>Phosphorus:</b> {fert_info['Phosphorus Fertilizer']}</li>
