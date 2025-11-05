@@ -236,14 +236,3 @@ with tab2:
             </ul>
         </div>
         """, unsafe_allow_html=True)
-
-# ===============================
-# 📘 FOOTER
-# ===============================
-
-st.markdown("---")
-st.markdown("""
-<div style="text-align:center; color:#388e3c;">
-    <b>Developed with 🌱 by Taneesha | Powered by Streamlit & PyTorch</b>
-</div>
-""", unsafe_allow_html=True)
